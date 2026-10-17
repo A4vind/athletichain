@@ -15,6 +15,7 @@ import { anchorVerified, approveRecord, checkIntegrity, raiseDispute, rejectReco
 import { rejectSchema } from "@/server/validators/forms";
 import { verifyMessage } from "ethers";
 import { connectCoachWallet } from "@/server/services/admin";
+import { relayer, revokeVerifierOnChain } from "@/server/blockchain/chain";
 
 async function me() {
   const u = await getCurrentUser();
@@ -107,7 +108,28 @@ export async function linkWalletAction(address: string, message: string, signatu
     const signedAt = Number(message.match(/at (\d+)$/)?.[1] ?? 0);
     if (Math.abs(Date.now() - signedAt) > 10 * 60_000) throw new AppError("VALIDATION", "Signature expired, try again");
     if (verifyMessage(message, signature).toLowerCase() !== address.toLowerCase()) throw new AppError("FORBIDDEN", "Signature does not match the wallet");
+    // The relayer pays gas and owns the contract; a coach must sign with a separate wallet.
+    let relayerAddress = "";
+    try {
+      relayerAddress = relayer().address.toLowerCase();
+    } catch {
+      /* no relayer key configured */
+    }
+    if (address.toLowerCase() === relayerAddress) {
+      throw new AppError("VALIDATION", "That is the relayer wallet, which pays gas for the app. In MetaMask, pick your own coach account and try again.");
+    }
+    const taken = await db.query.coaches.findFirst({ where: (c, { and, ne, sql }) => and(ne(c.id, coach!.id), sql`lower(${c.walletAddress}) = ${address.toLowerCase()}`) });
+    if (taken) throw new AppError("CONFLICT", "That wallet is already linked to another coach");
+    const previous = coach!.walletAddress;
     await db.update(schema.coaches).set({ walletAddress: address }).where(eq(schema.coaches.id, coach!.id));
+    // Switching wallets: the old one stops being a verifier. Records it already anchored stay valid.
+    if (previous && previous.toLowerCase() !== address.toLowerCase()) {
+      try {
+        await revokeVerifierOnChain(previous);
+      } catch {
+        /* chain unreachable: the database link has already moved to the new wallet */
+      }
+    }
     const reg = await connectCoachWallet(u.id);
     revalidatePath("/", "layout");
     return { ok: `Wallet linked. ${reg.note}.`, nonce: Date.now() };

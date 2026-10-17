@@ -5,8 +5,7 @@ import { startTransition, useActionState, useState } from "react";
 import { anchorWithSignature, approveAction, rejectAction } from "@/app/actions/records";
 import type { ActionState } from "./action-form";
 import { Icon } from "./icons";
-
-type Eth = { request: (a: { method: string; params?: unknown[] }) => Promise<unknown> };
+import { signVerifyTypedData } from "./metamask-sign";
 
 const STEPS = ["Coach approved", "Hash generated", "Signed by coach wallet", "Transaction confirmed"];
 
@@ -23,18 +22,13 @@ export function VerifyActions({ publicId }: { publicId: string }) {
   const step = pending ? 1 : done ? 4 : data ? (data.state === "needs-signature" ? 2 : 2) : 0;
 
   async function signWithMetaMask() {
-    const eth = (window as unknown as { ethereum?: Eth }).ethereum;
-    if (!eth || !data?.typedData) return setMm({ error: "MetaMask not found in this browser" });
+    if (!data?.typedData) return setMm({ error: "Nothing to sign yet" });
     try {
-      const [from] = (await eth.request({ method: "eth_requestAccounts" })) as string[];
-      const { domain, types, message } = data.typedData;
-      // MetaMask only signs for the chain this site is on, so switch it to the contract's chain first.
-      await eth.request({ method: "wallet_switchEthereumChain", params: [{ chainId: `0x${Number(domain.chainId).toString(16)}` }] });
-      const payload = JSON.stringify({ domain, types: { EIP712Domain: [{ name: "name", type: "string" }, { name: "version", type: "string" }, { name: "chainId", type: "uint256" }, { name: "verifyingContract", type: "address" }], ...types }, primaryType: "VerifyRecord", message });
-      const signature = (await eth.request({ method: "eth_signTypedData_v4", params: [from, payload] })) as string;
-      setMm(await anchorWithSignature(publicId, signature, message.deadline));
+      const { signature, deadline } = await signVerifyTypedData(data.typedData);
+      setMm(await anchorWithSignature(publicId, signature, deadline));
     } catch (err) {
-      setMm({ error: (err as Error).message });
+      const e = err as { code?: number; message?: string };
+      setMm({ error: e.code === 4001 ? "You cancelled the signature in MetaMask." : e.message ?? "Signing failed" });
     }
   }
 

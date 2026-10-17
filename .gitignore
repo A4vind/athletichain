@@ -15,3 +15,7 @@ contracts/deployments/localhost.json
 .next-prod
 .claude/
 apps/web/tsconfig.tsbuildinfo
+
+# any .env copy or backup holds secrets
+.env.*
+!.env.example

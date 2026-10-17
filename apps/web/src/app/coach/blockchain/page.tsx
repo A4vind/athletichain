@@ -1,9 +1,8 @@
 import { sql } from "drizzle-orm";
-import { ActionForm } from "@/components/action-form";
+import { AnchorButton } from "@/components/anchor-button";
 import { LinkWallet } from "@/components/link-wallet";
 import { RecordsTable } from "@/components/records";
 import { Empty, PageHead, Tile } from "@/components/ui";
-import { anchorAction } from "@/app/actions/records";
 import { chainNetwork, chainStatus, registry } from "@/server/blockchain/chain";
 import { coachContext } from "@/server/services/coach-context";
 import { listRecords } from "@/server/services/records";
@@ -44,6 +43,15 @@ export default async function CoachBlockchain() {
           <LinkWallet coachCode={coach.publicCode} />
         </section>
       ) : null}
+      {coach.walletAddress && chainNetwork() === "sepolia" ? (
+        <details className="card">
+          <summary style={{ cursor: "pointer", fontWeight: 600 }}>Use a different wallet</summary>
+          <p className="muted" style={{ margin: "12px 0", fontSize: 14 }}>
+            MetaMask will ask which account to link. The current wallet stops being a verifier; records it already anchored stay valid.
+          </p>
+          <LinkWallet coachCode={coach.publicCode} label="Choose another MetaMask account" />
+        </details>
+      ) : null}
       {chainNetwork() === "localhost" ? (
         <div className="alert alert-info">Local chain: your wallet is Hardhat test account #{Number(coach.publicCode.replace(/\D/g, ""))}, linked automatically when you were approved. On Sepolia you&apos;d link MetaMask instead.</div>
       ) : null}
@@ -56,9 +64,7 @@ export default async function CoachBlockchain() {
             showAthlete
             linkBase="/records"
             actions={(r) => (
-              <ActionForm action={anchorAction} submitLabel="Anchor now" submitClass="btn btn-dark btn-sm" inlineSubmit>
-                <input type="hidden" name="publicId" value={r.publicId} />
-              </ActionForm>
+              <AnchorButton publicId={r.publicId} />
             )}
           />
         </section>
