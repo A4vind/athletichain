@@ -1,0 +1,23 @@
+{
+  "name": "athletichain",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Blockchain-based athlete performance, progress and achievement verification system",
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "start:all": "node scripts/start-all.mjs",
+    "start:fresh": "node scripts/start-all.mjs --fresh",
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "test": "pnpm -r test",
+    "chain": "pnpm --filter contracts node",
+    "setup:local": "pnpm --filter @athletichain/canonical build && pnpm --filter contracts compile && pnpm --filter web db:reset && pnpm --filter web chain:setup",
+    "db:migrate": "pnpm --filter web db:migrate",
+    "db:seed": "pnpm --filter web db:seed",
+    "contracts:test": "pnpm --filter contracts test"
+  },
+  "devDependencies": {
+    "embedded-postgres": "17.5.0-beta.15"
+  }
+}
