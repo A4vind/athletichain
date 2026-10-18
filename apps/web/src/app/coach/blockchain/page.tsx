@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { sql } from "drizzle-orm";
 import { AnchorButton } from "@/components/anchor-button";
 import { LinkWallet } from "@/components/link-wallet";
@@ -39,7 +40,10 @@ export default async function CoachBlockchain() {
       {!coach.walletAddress && chainNetwork() === "sepolia" ? (
         <section className="card">
           <div className="card-head"><h2>Link your wallet</h2></div>
-          <p className="muted" style={{ margin: "0 0 12px", fontSize: 14 }}>Your approvals are signed with this wallet. Signing the link message is free.</p>
+          <p className="muted" style={{ margin: "0 0 12px", fontSize: 14 }}>
+            Your approvals are signed with this wallet. Signing the link message is free.{" "}
+            <Link href="/help/metamask">New to MetaMask? See the 5-minute setup guide</Link>
+          </p>
           <LinkWallet coachCode={coach.publicCode} />
         </section>
       ) : null}

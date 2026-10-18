@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { isMobile, metaMaskAppLink } from "./metamask-sign";
 
 /** Shown when no wallet is found: on a phone, offers to reopen this page inside the MetaMask app. */
@@ -13,6 +14,7 @@ export function MetaMaskMissing({ message }: { message: string }) {
       ) : (
         <a className="btn btn-ghost" href="https://metamask.io/download/" target="_blank" rel="noreferrer">Get MetaMask</a>
       )}
+      <Link href="/help/metamask" style={{ fontSize: 14, textAlign: "center" }}>Setup guide for coaches</Link>
     </div>
   );
 }

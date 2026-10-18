@@ -486,3 +486,21 @@ table.data td::before { font-family: var(--sans); font-weight: 400; }
 .demo-note { font-size: 12.5px; color: var(--text-3); }
 .auth-home { display: none; }
 @media (max-width: 860px) { .auth-side { flex-direction: row; align-items: center; } .auth-home { display: inline-flex; } }
+
+/* ---------- Help: MetaMask setup ---------- */
+.help-main { display: flex; flex-direction: column; gap: 20px; padding-top: 40px; padding-bottom: 64px; max-width: 860px; }
+.help-jump { display: flex; gap: 10px; flex-wrap: wrap; }
+.help-section { scroll-margin-top: 80px; }
+.help-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+.help-steps li { display: flex; gap: 14px; align-items: flex-start; }
+.help-steps h3 { font-size: 16.5px; margin-bottom: 4px; }
+.help-steps p { font-size: 15px; line-height: 1.55; }
+.help-num { width: 30px; height: 30px; border-radius: 999px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 14px; }
+.help-faq summary { cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; list-style: none; }
+.help-faq summary::-webkit-details-marker { display: none; }
+.help-faq p { margin: 12px 0 0 48px; font-size: 15px; line-height: 1.55; }
+@media (max-width: 640px) {
+  .help-main { padding-top: 24px; gap: 16px; }
+  .help-faq p { margin-left: 0; }
+  .help-jump .btn { flex: 1 1 0; }
+}

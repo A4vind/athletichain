@@ -181,7 +181,7 @@ export default async function Landing() {
 
       <footer style={{ borderTop: "1px solid var(--border)" }}>
         <div className="wrap" style={{ paddingTop: 22, paddingBottom: 28, fontSize: 14, color: "var(--text-3)", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-          <span>AthletiChain · final-year project</span>
+          <span>AthletiChain · final-year project · <Link href="/help/metamask">Coach wallet setup</Link></span>
           <span>Fingerprints anchored on Ethereum. A blockchain proof shows a record hasn&apos;t changed since the named coach verified it.</span>
         </div>
       </footer>
