@@ -8,6 +8,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: { default: "AthletiChain — Track. Verify. Improve.", template: "%s · AthletiChain" },
   description: "Coach-verified, blockchain-anchored athlete records that travel with the athlete.",
+  applicationName: "AthletiChain",
+  // iPhone "Add to Home Screen": open full screen with the page drawn behind a dark status bar.
+  appleWebApp: { capable: true, title: "AthletiChain", statusBarStyle: "black-translucent" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
