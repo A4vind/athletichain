@@ -58,8 +58,8 @@ export function PerformanceForm({ action, athletes, fixedAthlete, metrics, submi
         <MetricSelect metrics={metrics} />
       </Row>
       <Row>
-        <F label="Value" name="value"><input id="value" name="value" inputMode="decimal" className="input" placeholder="e.g. 12.40" /></F>
-        <F label="Date" name="recordedOn"><input id="recordedOn" name="recordedOn" type="date" max={today()} defaultValue={today()} className="input" /></F>
+        <F size="sm" label="Value" name="value"><input id="value" name="value" inputMode="decimal" className="input" placeholder="e.g. 12.40" /></F>
+        <F size="sm" label="Date" name="recordedOn"><input id="recordedOn" name="recordedOn" type="date" max={today()} defaultValue={today()} className="input" /></F>
         <F label="Event (optional)" name="eventName"><input id="eventName" name="eventName" className="input" placeholder="e.g. District Open" /></F>
       </Row>
       <Row>
@@ -85,11 +85,11 @@ export function AchievementForm({ action, athletes, fixedAthlete, submitLabel }:
       </Row>
       <Row>
         <F label="Title" name="title"><input id="title" name="title" className="input" placeholder="e.g. Tournament winner" /></F>
-        <F label="Result or position" name="result"><input id="result" name="result" className="input" placeholder="e.g. 1st" /></F>
+        <F size="sm" label="Result or position" name="result"><input id="result" name="result" className="input" placeholder="e.g. 1st" /></F>
       </Row>
       <Row>
         <F label="Tournament or event" name="eventName"><input id="eventName" name="eventName" className="input" placeholder="e.g. Mumbai Inter-Academy Meet · 100m" /></F>
-        <F label="Date" name="achievedOn"><input id="achievedOn" name="achievedOn" type="date" max={today()} defaultValue={today()} className="input" /></F>
+        <F size="sm" label="Date" name="achievedOn"><input id="achievedOn" name="achievedOn" type="date" max={today()} defaultValue={today()} className="input" /></F>
       </Row>
       <Evidence />
       <SubmitBox label={submitLabel} />
@@ -118,35 +118,39 @@ export function SessionForm({ action, athletes, teams }: { action: Act; athletes
   return (
     <ActionForm action={action} submitLabel="Save session">
       <Row>
-        <F label="Date" name="sessionDate"><input id="sessionDate" name="sessionDate" type="date" defaultValue={today()} className="input" /></F>
+        <F size="sm" label="Date" name="sessionDate"><input id="sessionDate" name="sessionDate" type="date" defaultValue={today()} className="input" /></F>
+        <F size="sm" label="Team" name="teamId">
+          <select id="teamId" name="teamId" className="input" defaultValue={teams[0]?.id ?? ""}>
+            <option value="">No team</option>
+            {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
+        </F>
+      </Row>
+      <Row>
         <F label="Training type" name="type"><input id="type" name="type" className="input" placeholder="e.g. Speed training" list="session-types" /></F>
         <datalist id="session-types">
           {["Speed training", "Strength and conditioning", "Technique drills", "Speed endurance", "Net session", "Fielding drills", "Fitness", "Match simulation"].map((t) => <option key={t} value={t} />)}
         </datalist>
-        <F label="Duration (min)" name="durationMin"><input id="durationMin" name="durationMin" inputMode="numeric" defaultValue="90" className="input" /></F>
-        <F label="Intensity" name="intensity">
+      </Row>
+      <Row>
+        <F size="sm" label="Duration (min)" name="durationMin"><input id="durationMin" name="durationMin" inputMode="numeric" defaultValue="90" className="input" /></F>
+        <F size="sm" label="Intensity" name="intensity">
           <select id="intensity" name="intensity" className="input" defaultValue="MEDIUM">
             <option value="LOW">Low</option><option value="MEDIUM">Medium</option><option value="HIGH">High</option>
           </select>
         </F>
       </Row>
       <Row>
-        <F label="Team" name="teamId">
-          <select id="teamId" name="teamId" className="input" defaultValue={teams[0]?.id ?? ""}>
-            <option value="">No team</option>
-            {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-          </select>
-        </F>
         <F label="Exercises" name="exercises"><input id="exercises" name="exercises" className="input" placeholder="e.g. Block starts ×6, 30m flys ×4" /></F>
         <F label="Notes / observations" name="notes"><input id="notes" name="notes" className="input" placeholder="e.g. Improved sprint acceleration" /></F>
       </Row>
-      <fieldset style={{ border: "1px solid var(--line)", borderRadius: 8, padding: "10px 14px", width: "100%", margin: 0 }}>
-        <legend style={{ fontSize: 14, fontWeight: 600, padding: "0 6px" }}>Attendance</legend>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 8 }}>
+      <fieldset className="attendance">
+        <legend>Attendance</legend>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(260px, 100%), 1fr))", gap: 8 }}>
           {athletes.map((a) => (
-            <label key={a.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, fontSize: 14 }}>
+            <label key={a.id} className="attendance-row">
               <span>{a.name}</span>
-              <select name={`att_${a.id}`} className="input" style={{ width: 130, minHeight: 38, padding: "6px 8px" }} defaultValue="PRESENT" aria-label={`Attendance for ${a.name}`}>
+              <select name={`att_${a.id}`} className="input" defaultValue="PRESENT" aria-label={`Attendance for ${a.name}`}>
                 <option value="PRESENT">Present</option><option value="ABSENT">Absent</option><option value="EXCUSED">Excused</option><option value="">Not planned</option>
               </select>
             </label>

@@ -66,12 +66,13 @@ export default async function CoachDashboard() {
       ) : null}
 
       <section className="tiles" aria-label="Summary">
-        <Tile label="Pending review" value={pendingTotal} subTone={pendingTotal ? "warn" : "good"} sub={pendingTotal ? "Waiting for you" : "All clear"} />
-        <Tile dark label="Records you verified" value={totals.verified} sub={`${rejected.rows[0] ? (rejected.rows[0] as { n: number }).n : 0} rejected`} />
-        <Tile label="Athletes" value={athletes.length} sub={`${active} active in 14 days`} subTone={athletes.length - active ? "warn" : "good"} />
-        <Tile label="Sessions · 4 weeks" value={totals.sessions28} sub={`${avgRate}% average attendance`} />
-        <Tile label="Active goals" value={totals.goals} />
+        <Tile href="/coach/verifications" label="Pending review" value={pendingTotal} subTone={pendingTotal ? "warn" : "good"} sub={pendingTotal ? "Waiting for you" : "All clear"} />
+        <Tile href="/coach/blockchain" dark label="Records you verified" value={totals.verified} sub={`${rejected.rows[0] ? (rejected.rows[0] as { n: number }).n : 0} rejected`} />
+        <Tile href="/coach/athletes" label="Athletes" value={athletes.length} sub={`${active} active in 14 days`} subTone={athletes.length - active ? "warn" : "good"} />
+        <Tile href="/coach/training" label="Sessions · 4 weeks" value={totals.sessions28} sub={`${avgRate}% average attendance`} />
+        <Tile href="/coach/goals" label="Active goals" value={totals.goals} />
         <Tile
+          href="/coach/blockchain"
           label="Verifier wallet"
           small
           value={coach.wallet_address ? <span className="mono">{`${coach.wallet_address.slice(0, 6)}…${coach.wallet_address.slice(-4)}`}</span> : "Not linked"}

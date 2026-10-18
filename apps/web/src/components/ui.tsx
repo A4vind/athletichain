@@ -1,11 +1,12 @@
 import type { TrustLevel } from "@/server/services/dashboards";
+import Link from "next/link";
 import { Icon, type IconName } from "./icons";
 
 export function Logo({ size = 26 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 30 30" fill="none" aria-hidden="true">
-      <rect x="1" y="1" width="28" height="28" rx="8" fill="#15223a" stroke="#ff8a3d" strokeWidth="2" />
-      <path d="M7 20 L13 10 L17 16 L23 8" stroke="#e8edf6" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="1" y="1" width="28" height="28" rx="8" fill="#17243b" stroke="#ff8a3d" strokeWidth="2" />
+      <path d="M7 20 L13 10 L17 16 L23 8" stroke="#f8fafc" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -30,14 +31,17 @@ export function TrustBadge({ level, short }: { level: TrustLevel; short?: boolea
   );
 }
 
-export function Tile({ label, value, sub, dark, subTone, small }: { label: string; value: React.ReactNode; sub?: React.ReactNode; dark?: boolean; subTone?: "good" | "warn"; small?: boolean }) {
-  return (
-    <div className={`tile${dark ? " tile-dark" : ""}`}>
-      <div className="tile-label">{label}</div>
+export function Tile({ label, value, sub, dark, subTone, small, href }: { label: string; value: React.ReactNode; sub?: React.ReactNode; dark?: boolean; subTone?: "good" | "warn"; small?: boolean; href?: string }) {
+  const body = (
+    <>
+      <div className="tile-label">{label}{href ? <Icon name="chevron" size={14} className="tile-chev" /> : null}</div>
       <div className={`tile-value${small ? " small" : ""}`}>{value}</div>
       {sub ? <div className={`tile-sub${subTone ? ` ${subTone}` : ""}`}>{sub}</div> : null}
-    </div>
+    </>
   );
+  const cls = `tile${dark ? " tile-dark" : ""}${href ? " tile-link" : ""}`;
+  // A tile is a link only when it opens an existing page with more detail.
+  return href ? <Link href={href} className={cls}>{body}</Link> : <div className={cls}>{body}</div>;
 }
 
 export function Empty({ title, children, icon = "circle", action }: { title: string; children?: React.ReactNode; icon?: IconName; action?: React.ReactNode }) {

@@ -27,8 +27,8 @@ export default async function AdminBlockchain() {
       <PageHead kicker="Proofs and verifiers" title="Blockchain" />
       {!status.ok ? <div className="alert alert-error">{status.error}</div> : null}
       <section className="tiles">
-        <Tile label="Network" value={status.network === "sepolia" ? "Sepolia" : "Local chain"} sub={status.chainId ? `chain ${status.chainId} · block ${status.block}` : "offline"} subTone={status.ok ? "good" : "warn"} />
-        <Tile label="Contract" value={status.contract ? `${status.contract.slice(0, 6)}…${status.contract.slice(-4)}` : "Not deployed"} sub="AthletiChainRegistry" />
+        <Tile label="Network" small value={status.network === "sepolia" ? "Sepolia" : "Local chain"} sub={status.chainId ? `chain ${status.chainId} · block ${status.block}` : "offline"} subTone={status.ok ? "good" : "warn"} />
+        <Tile label="Contract" small value={status.contract ? `${status.contract.slice(0, 6)}…${status.contract.slice(-4)}` : "Not deployed"} sub="AthletiChainRegistry" />
         <Tile label="Relayer balance" value={status.relayerBalanceEth !== null ? `${status.relayerBalanceEth.toFixed(3)} ETH` : "—"} sub={status.relayer ? `${status.relayer.slice(0, 6)}…${status.relayer.slice(-4)}` : undefined} />
         <Tile dark label="Anchored records" value={anchored.length} sub={`${failed.n} failed transactions`} />
         <Tile label="Integrity warnings" value={warnings.length} subTone={warnings.length ? "warn" : "good"} sub={warnings.length ? "Investigate now" : "All proofs match"} />

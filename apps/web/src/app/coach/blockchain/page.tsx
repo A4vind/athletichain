@@ -3,6 +3,7 @@ import { sql } from "drizzle-orm";
 import { AnchorButton } from "@/components/anchor-button";
 import { LinkWallet } from "@/components/link-wallet";
 import { RecordsTable } from "@/components/records";
+import { Icon } from "@/components/icons";
 import { Empty, PageHead, Tile } from "@/components/ui";
 import { chainNetwork, chainStatus, registry } from "@/server/blockchain/chain";
 import { coachContext } from "@/server/services/coach-context";
@@ -29,10 +30,16 @@ export default async function CoachBlockchain() {
   return (
     <>
       <PageHead kicker={`Coach ${coach.publicCode}`} title="Blockchain" />
-      {!status.ok ? <div className="alert alert-error">{status.error}</div> : null}
+      {!status.ok ? <div className="alert alert-error" role="alert"><Icon name="warning" size={18} /><div>{status.error}</div></div> : null}
       <section className="tiles">
-        <Tile label="Network" value={status.network === "sepolia" ? "Sepolia" : "Local chain"} sub={status.chainId ? `chain id ${status.chainId} · block ${status.block}` : "offline"} />
-        <Tile label="Your wallet" value={coach.walletAddress ? `${coach.walletAddress.slice(0, 6)}…${coach.walletAddress.slice(-4)}` : "Not linked"} sub={registered === null ? "—" : registered ? "Registered verifier ✓" : "Not registered"} subTone={registered ? "good" : "warn"} />
+        <Tile label="Network" small value={status.network === "sepolia" ? "Sepolia" : "Local chain"} sub={status.chainId ? `chain id ${status.chainId} · block ${status.block}` : "offline"} />
+        <Tile
+          label="Your wallet"
+          small
+          value={coach.walletAddress ? <span className="mono" title={coach.walletAddress}>{`${coach.walletAddress.slice(0, 6)}…${coach.walletAddress.slice(-4)}`}</span> : "Not linked"}
+          sub={!coach.walletAddress ? "Link a wallet to anchor records" : registered === null ? "Registration status unavailable" : registered ? "Registered verifier ✓" : "Not registered as verifier"}
+          subTone={registered ? "good" : "warn"}
+        />
         <Tile label="Records you verified" value={records.length} />
         <Tile dark label="Anchored on-chain" value={anchored} sub={waiting.length ? `${waiting.length} waiting to anchor` : "All anchored"} />
       </section>
@@ -56,6 +63,24 @@ export default async function CoachBlockchain() {
           <LinkWallet coachCode={coach.publicCode} label="Choose another MetaMask account" />
         </details>
       ) : null}
+      <section className="card" aria-labelledby="how-h">
+        <div className="card-head"><h2 id="how-h">How anchoring works</h2></div>
+        <ol className="how-steps">
+          <li>
+            <span className="icon-chip ok"><Icon name="check" size={18} /></span>
+            <div><strong>You approve</strong><p className="muted">The record is coach verified and its fingerprint (SHA-256 hash) is fixed.</p></div>
+          </li>
+          <li>
+            <span className="icon-chip accent"><Icon name="wallet" size={18} /></span>
+            <div><strong>You sign a message</strong><p className="muted">{chainNetwork() === "sepolia" ? "MetaMask asks you to sign the fingerprint. This is a signature, not a payment: it spends no ETH." : "On the local chain your demo wallet signs the fingerprint automatically. On Sepolia, MetaMask asks you to sign."}</p></div>
+          </li>
+          <li>
+            <span className="icon-chip chain"><Icon name="hexagon" size={18} /></span>
+            <div><strong>The relayer submits the transaction</strong><p className="muted">AthletiChain sends your signature to the contract and pays the network fee. The record shows as anchored only after the block confirms.</p></div>
+          </li>
+        </ol>
+      </section>
+
       {chainNetwork() === "localhost" ? (
         <div className="alert alert-info">Local chain: your wallet is Hardhat test account #{Number(coach.publicCode.replace(/\D/g, ""))}, linked automatically when you were approved. On Sepolia you&apos;d link MetaMask instead.</div>
       ) : null}

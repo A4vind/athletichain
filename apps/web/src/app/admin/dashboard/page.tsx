@@ -51,12 +51,12 @@ export default async function AdminDashboard() {
       ) : null}
 
       <section className="tiles" aria-label="Summary">
-        <Tile label="Coach approvals" value={stats.pending_coaches} sub={stats.pending_coaches ? "Waiting for you" : "None waiting"} subTone={stats.pending_coaches ? "warn" : "good"} />
-        <Tile label="Athletes" value={stats.athletes} sub={`${stats.teams} teams · ${stats.academies} academies`} />
-        <Tile label="Active coaches" value={stats.coaches} />
-        <Tile label="Verified records" value={stats.verified} sub={`${stats.pending} pending review`} />
-        <Tile dark label="Anchored on-chain" value={stats.anchored} sub={stats.warnings ? `${stats.warnings} integrity warnings` : "No integrity warnings"} subTone={stats.warnings ? "warn" : "good"} />
-        <Tile label="Active users · 30 days" value={stats.active_users} />
+        <Tile href="/admin/coaches" label="Coach approvals" value={stats.pending_coaches} sub={stats.pending_coaches ? "Waiting for you" : "None waiting"} subTone={stats.pending_coaches ? "warn" : "good"} />
+        <Tile href="/admin/athletes" label="Athletes" value={stats.athletes} sub={`${stats.teams} teams · ${stats.academies} academies`} />
+        <Tile href="/admin/coaches" label="Active coaches" value={stats.coaches} />
+        <Tile href="/admin/verifications" label="Verified records" value={stats.verified} sub={`${stats.pending} pending review`} />
+        <Tile href="/admin/blockchain" dark label="Anchored on-chain" value={stats.anchored} sub={stats.warnings ? `${stats.warnings} integrity warnings` : "No integrity warnings"} subTone={stats.warnings ? "warn" : "good"} />
+        <Tile href="/admin/users" label="Active users · 30 days" value={stats.active_users} />
       </section>
 
       <div className="grid-main">

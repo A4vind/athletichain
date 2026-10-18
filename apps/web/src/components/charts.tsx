@@ -9,14 +9,14 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 const short = (iso: string) => `${Number(iso.slice(8, 10))} ${MONTHS[Number(iso.slice(5, 7)) - 1]}`;
 
 const C = {
-  grid: "#1e2b44",
-  axis: "#2f4264",
-  label: "#8492ad",
-  text: "#e8edf6",
+  grid: "#1e2b42",
+  axis: "#34465f",
+  label: "#94a3b8",
+  text: "#f8fafc",
   accent: "#ff8a3d",
-  planned: "#1c2b47",
-  goal: "#3ccb8a",
-  bg: "#0f1a2d",
+  planned: "#1e2d48",
+  goal: "#22c55e",
+  bg: "#111b2e",
 };
 
 /** Draws at the container's real pixel width so labels stay readable on phones. */

@@ -56,15 +56,16 @@ export default async function AthleteDashboard() {
 
       <section className="tiles" aria-label="Summary">
         <Tile
+          href="/athlete/performance"
           label={metric ? `Best ${metric.name}` : "Personal best"}
           value={best && metric ? <>{best.value.toFixed(metric.decimals)}<span className="muted" style={{ fontSize: 15, fontWeight: 500 }}> {metric.unit}</span></> : "—"}
           sub={best ? fmtDate(best.date) : "No results yet"}
         />
-        <Tile dark label="Verified records" value={counts.verified} sub={`${counts.anchored} anchored on-chain`} />
-        <Tile label="Waiting for coach" value={counts.pending} sub={counts.pending ? "Pending review" : "Nothing waiting"} subTone={counts.pending ? "warn" : "good"} />
-        <Tile label="Attendance · 12 weeks" value={`${attendance.rate}%`} sub={`${attendance.present} of ${attendance.planned} sessions`} subTone={attendance.planned ? (attendance.rate >= 80 ? "good" : "warn") : undefined} />
-        <Tile label="Active goals" value={activeGoals.length} sub={activeGoals.filter((g) => g.atRisk).length ? `${activeGoals.filter((g) => g.atRisk).length} at risk` : activeGoals.length ? "On track" : "None set"} subTone={activeGoals.some((g) => g.atRisk) ? "warn" : undefined} />
-        <Tile label="Achievements" value={counts.achievements} sub={achievements[0] ? achievements[0].title : undefined} />
+        <Tile href="/athlete/verification" dark label="Verified records" value={counts.verified} sub={`${counts.anchored} anchored on-chain`} />
+        <Tile href="/athlete/verification" label="Waiting for coach" value={counts.pending} sub={counts.pending ? "Pending review" : "Nothing waiting"} subTone={counts.pending ? "warn" : "good"} />
+        <Tile href="/athlete/training" label="Attendance · 12 weeks" value={`${attendance.rate}%`} sub={`${attendance.present} of ${attendance.planned} sessions`} subTone={attendance.planned ? (attendance.rate >= 80 ? "good" : "warn") : undefined} />
+        <Tile href="/athlete/goals" label="Active goals" value={activeGoals.length} sub={activeGoals.filter((g) => g.atRisk).length ? `${activeGoals.filter((g) => g.atRisk).length} at risk` : activeGoals.length ? "On track" : "None set"} subTone={activeGoals.some((g) => g.atRisk) ? "warn" : undefined} />
+        <Tile href="/athlete/achievements" label="Achievements" value={counts.achievements} sub={achievements[0] ? achievements[0].title : undefined} />
       </section>
 
       <div className="grid-main">

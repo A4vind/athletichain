@@ -58,7 +58,7 @@ export function VerifyActions({ publicId }: { publicId: string }) {
       ) : null}
 
       {!data && !state.error ? (
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+        <div className="verify-buttons" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
           <form style={{ flex: "1 1 auto", display: "flex" }} onSubmit={(e) => { e.preventDefault(); const f = new FormData(); f.set("publicId", publicId); startTransition(() => approve(f)); }}>
             <button type="submit" className="btn btn-primary" style={{ flex: "1 1 auto" }} disabled={pending || rejecting}>
               {pending ? <><span className="spin" aria-hidden="true" />Signing and sending transaction…</> : <><Icon name="hexagon" size={18} />Approve and anchor on-chain</>}

@@ -50,7 +50,7 @@ export function ActionForm({
       }}
     >
       {children}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: inlineSubmit ? "auto" : "100%" }}>
+      <div className={inlineSubmit ? undefined : "form-submit"} style={{ display: "flex", flexDirection: "column", gap: 8, width: inlineSubmit ? "auto" : "100%" }}>
         <div>
           <button type="submit" className={submitClass} disabled={pending}>
             {pending ? <><span className="spin" aria-hidden="true" />Working…</> : submitLabel}
@@ -65,9 +65,10 @@ export function ActionForm({
   );
 }
 
-export function F({ label, name, hint, children }: { label: string; name: string; hint?: string; children?: React.ReactNode }) {
+/** Labelled form field. size="sm" lets short inputs (dates, numbers, selects) share a row, even on phones. */
+export function F({ label, name, hint, children, size }: { label: string; name: string; hint?: string; children?: React.ReactNode; size?: "sm" }) {
   return (
-    <div className="field" style={{ flex: "1 1 180px", minWidth: 0 }}>
+    <div className="field" style={{ flex: size === "sm" ? "1 1 140px" : "1 1 220px", minWidth: 0 }}>
       <label htmlFor={name}>{label}</label>
       {children ?? <input id={name} name={name} className="input" />}
       {hint ? <span className="hint">{hint}</span> : null}

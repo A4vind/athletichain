@@ -58,7 +58,7 @@ export default function MetaMaskHelp() {
             <Logo size={28} />
             <span className="brand-name">AthletiChain</span>
           </Link>
-          <Link href="/coach/blockchain" className="btn btn-ghost">Go to Blockchain page</Link>
+          <Link href="/coach/blockchain" className="btn btn-ghost"><span className="hide-xs">Go to&nbsp;</span>Blockchain page</Link>
         </nav>
       </header>
 
