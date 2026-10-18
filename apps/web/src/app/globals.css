@@ -254,6 +254,8 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); width
 .alert-info { background: var(--chain-bg); color: #cfe0ff; border-color: var(--chain-line); }
 .alert-warn { background: var(--wait-bg); color: #f8e2ae; border-color: var(--wait-line); }
 .alert a { color: inherit; font-weight: 600; }
+.alert a.btn-primary { color: var(--accent-ink); }
+.alert a.btn-ghost { color: var(--text); }
 
 .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .segmented input { position: absolute; opacity: 0; pointer-events: none; }

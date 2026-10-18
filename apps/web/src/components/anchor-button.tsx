@@ -5,7 +5,8 @@ import { useState } from "react";
 import { anchorAction, anchorWithSignature } from "@/app/actions/records";
 import type { ActionState } from "./action-form";
 import { Icon } from "./icons";
-import { signVerifyTypedData, type VerifyTypedData } from "./metamask-sign";
+import { MetaMaskMissing } from "./metamask-missing";
+import { noWalletMessage, signVerifyTypedData, type VerifyTypedData } from "./metamask-sign";
 
 type Result = { state: string; typedData?: VerifyTypedData };
 
@@ -54,7 +55,11 @@ export function AnchorButton({ publicId }: { publicId: string }) {
           {label}
         </button>
       )}
-      {res?.error ? <div className="alert alert-error" role="alert" style={{ width: "100%" }}><Icon name="warning" size={18} /><div>{res.error}</div></div> : null}
+      {res?.error === noWalletMessage() ? (
+        <div style={{ width: "100%" }}><MetaMaskMissing message={res.error} /></div>
+      ) : res?.error ? (
+        <div className="alert alert-error" role="alert" style={{ width: "100%" }}><Icon name="warning" size={18} /><div>{res.error}</div></div>
+      ) : null}
       {res?.ok ? (
         <div className={`alert ${anchored ? "alert-info" : "alert-warn"}`} role="status" style={{ width: "100%" }}>
           <Icon name={anchored ? "hexagon" : "warning"} size={18} /><div>{res.ok}</div>

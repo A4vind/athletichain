@@ -5,7 +5,8 @@ import { startTransition, useActionState, useState } from "react";
 import { anchorWithSignature, approveAction, rejectAction } from "@/app/actions/records";
 import type { ActionState } from "./action-form";
 import { Icon } from "./icons";
-import { signVerifyTypedData } from "./metamask-sign";
+import { MetaMaskMissing } from "./metamask-missing";
+import { noWalletMessage, signVerifyTypedData } from "./metamask-sign";
 
 const STEPS = ["Coach approved", "Hash generated", "Signed by coach wallet", "Transaction confirmed"];
 
@@ -103,7 +104,11 @@ export function VerifyActions({ publicId }: { publicId: string }) {
       ) : data && data.state !== "needs-signature" ? (
         <div className="alert alert-warn" role="status"><Icon name="warning" size={18} /><div>{state.ok}</div></div>
       ) : null}
-      {mm?.error ? <div className="alert alert-error" role="alert"><Icon name="warning" size={18} /><div>{mm.error}</div></div> : null}
+      {mm?.error === noWalletMessage() ? (
+        <MetaMaskMissing message={mm.error} />
+      ) : mm?.error ? (
+        <div className="alert alert-error" role="alert"><Icon name="warning" size={18} /><div>{mm.error}</div></div>
+      ) : null}
     </div>
   );
 }
