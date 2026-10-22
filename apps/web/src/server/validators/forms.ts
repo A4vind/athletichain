@@ -33,7 +33,7 @@ export const achievementSchema = z.object({
 
 export const sessionSchema = z.object({
   teamId: z.string().uuid().optional().or(z.literal("").transform(() => undefined)),
-  sessionDate: isoDate,
+  sessionDate: pastDate, // attendance can only be recorded for a session that has happened
   type: z.string().trim().min(2, "Enter the training type").max(80),
   durationMin: num("Duration").refine((v) => Number.isInteger(v) && v > 0 && v <= 600, "Duration must be 1–600 minutes"),
   intensity: z.enum(["LOW", "MEDIUM", "HIGH"]),

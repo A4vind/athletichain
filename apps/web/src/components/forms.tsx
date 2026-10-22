@@ -163,7 +163,7 @@ export function SessionForm({ action, athletes, teams, sportCode }: { action: Ac
   return (
     <ActionForm action={action} submitLabel="Save session">
       <Row>
-        <F size="sm" label="Date" name="sessionDate"><input id="sessionDate" name="sessionDate" type="date" defaultValue={today()} className="input" /></F>
+        <F size="sm" label="Date" name="sessionDate"><input id="sessionDate" name="sessionDate" type="date" max={today()} defaultValue={today()} className="input" /></F>
         <F size="sm" label="Team" name="teamId">
           <select id="teamId" name="teamId" className="input" defaultValue={teams[0]?.id ?? ""}>
             <option value="">No team</option>
