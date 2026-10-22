@@ -89,7 +89,7 @@ async function TabBody({ tab, athleteId, userId, metrics }: { tab: Tab; athleteI
   if (tab === "achievements")
     return (
       <>
-        <section className="card"><div className="card-head"><h2>Record an achievement</h2></div><AchievementForm action={addAchievementAction} fixedAthlete={athleteId} submitLabel="Send to another coach for verification" /></section>
+        <section className="card"><div className="card-head"><h2>Record an achievement</h2></div><AchievementForm action={addAchievementAction} fixedAthlete={athleteId} sportCode={metrics[0]?.sport_code} submitLabel="Send to another coach for verification" /></section>
         <section className="card"><AchievementsTable rows={await achievementsFor([athleteId])} /></section>
       </>
     );
@@ -97,7 +97,7 @@ async function TabBody({ tab, athleteId, userId, metrics }: { tab: Tab; athleteI
     const fb = await feedbackFor(athleteId);
     return (
       <>
-        <section className="card"><div className="card-head"><h2>Write feedback</h2></div><FeedbackForm action={feedbackAction} athleteId={athleteId} /></section>
+        <section className="card"><div className="card-head"><h2>Write feedback</h2></div><FeedbackForm action={feedbackAction} athleteId={athleteId} sportCode={metrics[0]?.sport_code} /></section>
         <section className="card">
           {fb.length ? fb.map((f) => (
             <div className="list-row" key={f.id}>

@@ -78,7 +78,7 @@ export function VerifyActions({ publicId }: { publicId: string }) {
           <input type="hidden" name="publicId" value={publicId} />
           <div className="field" style={{ flex: "1 1 260px" }}>
             <label htmlFor={`reason-${publicId}`}>Reason for rejecting (the athlete sees this)</label>
-            <input id={`reason-${publicId}`} name="reason" className="input" placeholder="e.g. Time not visible in the video" required minLength={3} />
+            <input id={`reason-${publicId}`} name="reason" className="input" placeholder="e.g. The result isn't visible on the evidence" required minLength={3} />
           </div>
           <button type="submit" className="btn btn-danger" disabled={rejecting}>{rejecting ? <><span className="spin" aria-hidden="true" />Rejecting…</> : "Confirm rejection"}</button>
         </form>

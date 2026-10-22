@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { isRealDate } from "./auth";
 
 const today = () => new Date().toISOString().slice(0, 10);
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use a valid date");
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use a valid date").refine(isRealDate, "Enter a real date");
 const pastDate = isoDate.refine((d) => d <= today(), "Date can't be in the future");
 const optText = (max: number) => z.string().trim().max(max).optional().transform((v) => (v ? v : undefined));
 const checkbox = z.preprocess((v) => v === "on" || v === "true" || v === true, z.boolean());

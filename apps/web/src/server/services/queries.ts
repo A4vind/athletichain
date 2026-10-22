@@ -8,21 +8,21 @@ async function rows<T>(q: ReturnType<typeof sql>) {
   return (await db.execute(q)).rows as T[];
 }
 
-export type MetricOption = { id: string; name: string; unit: string; direction: string; decimals: number; is_anchorable: boolean; sport_id: string; sport: string };
+export type MetricOption = { id: string; code: string; name: string; unit: string; direction: string; decimals: number; is_anchorable: boolean; sport_id: string; sport: string; sport_code: string };
 
 export async function metricsForSports(sportIds: string[]) {
   if (!sportIds.length) return [];
   return rows<MetricOption>(sql`
-    select m.id, m.name, m.unit, m.direction, m.decimals, m.is_anchorable, m.sport_id, s.name as sport
+    select m.id, m.code, m.name, m.unit, m.direction, m.decimals, m.is_anchorable, m.sport_id, s.name as sport, s.code as sport_code
     from sport_metrics m join sports s on s.id = m.sport_id
     where m.sport_id in (${sql.join(sportIds.map((id) => sql`${id}`), sql`, `)}) order by s.name, m.name`);
 }
 
-export type AthleteOption = { id: string; name: string; code: string; sport_id: string; sport: string; team_id: string | null; team: string | null; user_id: string };
+export type AthleteOption = { id: string; name: string; code: string; sport_id: string; sport: string; sport_code: string; team_id: string | null; team: string | null; user_id: string };
 
 export async function coachAthletes(coachId: string) {
   return rows<AthleteOption>(sql`
-    select a.id, u.full_name as name, a.public_code as code, a.sport_id, s.name as sport, t.id as team_id, t.name as team, a.user_id
+    select a.id, u.full_name as name, a.public_code as code, a.sport_id, s.name as sport, s.code as sport_code, t.id as team_id, t.name as team, a.user_id
     from coach_assignments ca join athletes a on a.id = ca.athlete_id join users u on u.id = a.user_id join sports s on s.id = a.sport_id
     left join team_memberships tm on tm.athlete_id = a.id and tm.end_date is null left join teams t on t.id = tm.team_id
     where ca.coach_id = ${coachId} and ca.end_date is null order by u.full_name`);

@@ -3,6 +3,7 @@
 import { startTransition, useActionState, useState } from "react";
 import { registerAction, type FormState } from "../actions";
 import { Field, Submit } from "../form-bits";
+import { examplesFor } from "@/components/sport-examples";
 
 type Option = { value: string; label: string };
 
@@ -12,6 +13,13 @@ function under18(dob: string) {
   const now = new Date();
   const age = now.getUTCFullYear() - d.getUTCFullYear() - (now < new Date(Date.UTC(now.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())) ? 1 : 0);
   return age < 18;
+}
+
+/** Date picker limits matching the server rules: 5 to 100 years old, never in the future. */
+function dobBounds() {
+  const now = new Date();
+  const shift = (years: number) => new Date(Date.UTC(now.getUTCFullYear() - years, now.getUTCMonth(), now.getUTCDate())).toISOString().slice(0, 10);
+  return { min: shift(100), max: shift(5) };
 }
 
 export function RegisterForm({ sports, academies }: { sports: Option[]; academies: Option[] }) {
@@ -63,9 +71,9 @@ export function RegisterForm({ sports, academies }: { sports: Option[]; academie
       ) : (
         <>
           <Field name="dateOfBirth" label="Date of birth" error={fe.dateOfBirth}>
-            <input id="dateOfBirth" name="dateOfBirth" type="date" className="input" value={dob} onChange={(e) => setDob(e.target.value)} aria-invalid={fe.dateOfBirth ? true : undefined} />
+            <input id="dateOfBirth" name="dateOfBirth" type="date" min={dobBounds().min} max={dobBounds().max} className="input" value={dob} onChange={(e) => setDob(e.target.value)} aria-invalid={fe.dateOfBirth ? true : undefined} />
           </Field>
-          <Field name="position" label="Position or event (optional)" defaultValue={v.position} hint="e.g. Sprints · 100m, or Opening batter" />
+          <Field name="position" label="Position or event (optional)" defaultValue={v.position} hint={sport ? `e.g. ${examplesFor(sport).position}` : "Choose your sport above to see an example"} />
           {minor ? (
             <div className="card" style={{ background: "var(--wait-bg)", borderColor: "var(--wait-line)", display: "flex", flexDirection: "column", gap: 12 }}>
               <p style={{ margin: 0, fontSize: 14, color: "#f8e2ae" }}>
