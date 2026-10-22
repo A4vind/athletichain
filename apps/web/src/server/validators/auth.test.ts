@@ -33,7 +33,9 @@ describe("auth validators", () => {
     expect(message(`${year + 3}-05-01`)).toBe("Date of birth can't be in the future");
     expect(message(new Date().toISOString().slice(0, 10))).toBe("Athletes must be at least 5 years old");
     expect(message(`${year - 2}-01-01`)).toBe("Athletes must be at least 5 years old");
-    expect(message("1850-01-01")).toBe("Check the year of birth");
+    expect(message("1850-01-01")).toBe("Athletes must be 60 or younger (retirement age)");
+    expect(message(`${year - 65}-01-01`)).toBe("Athletes must be 60 or younger (retirement age)");
+    expect(dob(`${year - 59}-01-01`).success).toBe(true);
     expect(message("2010-02-31")).toBe("Enter a real date");
     expect(message("2010-13-01")).toBe("Enter a real date");
     expect(dob("2012-02-29").success).toBe(true); // leap day exists

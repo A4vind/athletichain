@@ -21,7 +21,7 @@ export function isRealDate(iso: string): boolean {
 
 /** Youngest and oldest age accepted for an athlete's date of birth. */
 export const MIN_ATHLETE_AGE = 5;
-export const MAX_ATHLETE_AGE = 100;
+export const MAX_ATHLETE_AGE = 60; // retirement age
 
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD").refine(isRealDate, "Enter a real date");
 
@@ -50,7 +50,7 @@ export const registerSchema = z
       } else if (age < MIN_ATHLETE_AGE) {
         ctx.addIssue({ code: "custom", path: ["dateOfBirth"], message: `Athletes must be at least ${MIN_ATHLETE_AGE} years old` });
       } else if (age > MAX_ATHLETE_AGE) {
-        ctx.addIssue({ code: "custom", path: ["dateOfBirth"], message: "Check the year of birth" });
+        ctx.addIssue({ code: "custom", path: ["dateOfBirth"], message: `Athletes must be ${MAX_ATHLETE_AGE} or younger (retirement age)` });
       } else if (age < 18 && !v.guardianEmail) {
         ctx.addIssue({ code: "custom", path: ["guardianEmail"], message: "Athletes under 18 need a parent or guardian email" });
       }

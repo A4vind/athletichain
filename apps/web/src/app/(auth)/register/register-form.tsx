@@ -4,6 +4,7 @@ import { startTransition, useActionState, useState } from "react";
 import { registerAction, type FormState } from "../actions";
 import { Field, Submit } from "../form-bits";
 import { examplesFor } from "@/components/sport-examples";
+import { MAX_ATHLETE_AGE, MIN_ATHLETE_AGE } from "@/server/validators/auth";
 
 type Option = { value: string; label: string };
 
@@ -15,11 +16,12 @@ function under18(dob: string) {
   return age < 18;
 }
 
-/** Date picker limits matching the server rules: 5 to 100 years old, never in the future. */
+/** Date picker limits matching the server rules: 5 to 60 (retirement age), never in the future. */
 function dobBounds() {
   const now = new Date();
-  const shift = (years: number) => new Date(Date.UTC(now.getUTCFullYear() - years, now.getUTCMonth(), now.getUTCDate())).toISOString().slice(0, 10);
-  return { min: shift(100), max: shift(5) };
+  const shift = (years: number, days = 0) => new Date(Date.UTC(now.getUTCFullYear() - years, now.getUTCMonth(), now.getUTCDate() + days)).toISOString().slice(0, 10);
+  // Oldest allowed: the day after someone would turn MAX + 1.
+  return { min: shift(MAX_ATHLETE_AGE + 1, 1), max: shift(MIN_ATHLETE_AGE) };
 }
 
 export function RegisterForm({ sports, academies }: { sports: Option[]; academies: Option[] }) {
