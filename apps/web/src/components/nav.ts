@@ -45,6 +45,7 @@ export async function navFor(user: User): Promise<{ nav: NavItem[]; roleLabel: s
         { href: "/coach/verifications", label: "Verifications", count: queue, icon: "clipboard", primary: true, short: "Verify" },
         { href: "/coach/blockchain", label: "Blockchain", icon: "chain" },
         notifications,
+        { href: "/coach/settings", label: "Profile & settings", icon: "settings" },
       ],
     };
   }
@@ -65,6 +66,7 @@ export async function navFor(user: User): Promise<{ nav: NavItem[]; roleLabel: s
       { href: "/admin/blockchain", label: "Blockchain", count: warnings, icon: "chain", primary: true, short: "Chain" },
       { href: "/admin/audit-log", label: "Audit log", icon: "log" },
       notifications,
+      { href: "/admin/settings", label: "Profile & settings", icon: "settings" },
     ],
   };
 }
